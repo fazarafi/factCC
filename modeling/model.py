@@ -103,7 +103,7 @@ class BertPointer(BertPreTrainedModel):
 
                 span_loss = (ext_start_loss + ext_end_loss + aug_start_loss + aug_end_loss) / 4
 
-                # combined loss
+                # combined loss try
                 loss = labels_loss + loss_lambda * span_loss
 
             outputs = (loss, labels_loss, span_loss, ext_start_loss, ext_end_loss, aug_start_loss, aug_end_loss) + outputs
