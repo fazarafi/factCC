@@ -3,7 +3,7 @@
 
 # UPDATE PATHS BEFORE RUNNING SCRIPT
 export CODE_PATH='/home/lr/faza.thirafi/repository/factCC/modeling' # absolute path to modeling directory
-export DATA_PATH='/home/lr/faza.thirafi/dataset/data/sum-cnn' # absolute path to data directory
+export DATA_PATH='/home/lr/faza.thirafi/dataset/data/sum-cn' # absolute path to data directory
 export CKPT_PATH='/home/lr/faza.thirafi/repository/factCC/modeling/factcc-checkpoint' # absolute path to model checkpoint
 
 export TASK_NAME=factcc_annotated
