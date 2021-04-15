@@ -138,3 +138,4 @@ dmypy.json
 
 modeling/factcc-checkpoint/*
 modeling/factccx-checkpoint/*
+modeling/configure.scan
