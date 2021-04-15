@@ -22,6 +22,7 @@ import glob
 import logging
 import os
 import random
+import datetime as dt
 
 import wandb
 import numpy as np
@@ -238,7 +239,15 @@ def evaluate(args, model, tokenizer, prefix=""):
 
             with torch.no_grad():
                 inputs = make_model_input(args, batch)
+    
+                logger.info("[FAZA] START COUNT")
+                start = dt.datetime.now()
+
                 outputs = model(**inputs)
+
+                end = dt.datetime.now()
+                logger.info("[FAZA] result: " + str(outputs))
+                logger.info("[FAZA] elapsed time: " + str(end-start.total_seconds()) + " seconds")
 
                 # monitoring
                 tmp_eval_loss = outputs[0]
