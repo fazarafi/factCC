@@ -241,13 +241,13 @@ def evaluate(args, model, tokenizer, prefix=""):
                 inputs = make_model_input(args, batch)
     
                 logger.info("[FAZA] START COUNT")
-                start = dt.datetime.now()
+                start = dt.datetime.utcnow()
 
                 outputs = model(**inputs)
 
-                end = dt.datetime.now()
+                end = dt.datetime.utcnow()
                 logger.info("[FAZA] result: " + str(outputs))
-                logger.info("[FAZA] elapsed time: " + str(end-start.total_seconds()) + " seconds")
+                logger.info("[FAZA] elapsed time: " + str((end-start).total_seconds()) + " seconds")
 
                 # monitoring
                 tmp_eval_loss = outputs[0]
