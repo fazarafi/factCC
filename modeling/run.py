@@ -246,7 +246,7 @@ def evaluate(args, model, tokenizer, prefix=""):
                 outputs = model(**inputs)
 
                 end = dt.datetime.utcnow()
-                logger.info("[FAZA] result: " + str(outputs))
+                # logger.info("[FAZA] result: " + str(outputs))
                 logger.info("[FAZA] elapsed time: " + str((end-start).total_seconds()) + " seconds")
 
                 # monitoring
@@ -262,6 +262,7 @@ def evaluate(args, model, tokenizer, prefix=""):
             else:
                 preds = np.append(preds, logits.detach().cpu().numpy(), axis=0)
                 out_label_ids = np.append(out_label_ids, inputs['labels'].detach().cpu().numpy(), axis=0)
+            logger.info("[FAZA] preds: " + str(preds))
 
         preds = np.argmax(preds, axis=1)
         result = compute_metrics(args.task_name, preds, out_label_ids)
