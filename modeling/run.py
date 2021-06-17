@@ -253,6 +253,7 @@ def evaluate(args, model, tokenizer, prefix=""):
                 tmp_eval_loss = outputs[0]
                 logits_ix = 1 if args.model_type == "bert" else 7
                 logits = outputs[logits_ix]
+                logger.info("[FAZA] logits: " + str(logits))
                 eval_loss += tmp_eval_loss.mean().item()
                 nb_eval_steps += 1
 
@@ -265,6 +266,7 @@ def evaluate(args, model, tokenizer, prefix=""):
             logger.info("[FAZA] preds: " + str(preds))
 
         preds = np.argmax(preds, axis=1)
+        logger.info("[FAZA] END preds: " + str(preds))
         result = compute_metrics(args.task_name, preds, out_label_ids)
         eval_loss = eval_loss / nb_eval_steps
         result["loss"] = eval_loss
