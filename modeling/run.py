@@ -239,8 +239,12 @@ def evaluate(args, model, tokenizer, prefix=""):
 
             with torch.no_grad():
                 inputs = make_model_input(args, batch)
-    
+
+                logger.info("[FAZA] inputs: " + str(inputs))
+                logger.info("[FAZA] batch: " + str(batch))
+
                 # logger.info("[FAZA] START COUNT")
+
                 start = dt.datetime.utcnow()
 
                 outputs = model(**inputs)
@@ -281,6 +285,29 @@ def evaluate(args, model, tokenizer, prefix=""):
 
     return results
 
+def evaluate_single(args, model, document, summary):
+    with torch.no_grad():
+        inputs = make_model_input(args, batch)
+
+        # logger.info("[FAZA] START COUNT")
+        start = dt.datetime.utcnow()
+
+        outputs = model(**inputs)
+
+        end = dt.datetime.utcnow()
+        # logger.info("[FAZA] elapsed time: " + str((end-start).total_seconds()) + " seconds")
+
+        # monitoring
+        logits_ix = 1 if args.model_type == "bert" else 7
+        logits = outputs[logits_ix]
+        
+    if preds is None:
+        preds = logits.detach().cpu().numpy()
+    else:
+        preds = np.append(preds, logits.detach().cpu().numpy(), axis=0)
+    pred_result = np.argmax(preds, axis=1)
+
+    return pred_result
 
 def load_and_cache_examples(args, task, tokenizer, evaluate=False):
     if args.local_rank not in [-1, 0]:
