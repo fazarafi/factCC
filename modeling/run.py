@@ -240,20 +240,18 @@ def evaluate(args, model, tokenizer, prefix=""):
             with torch.no_grad():
                 inputs = make_model_input(args, batch)
     
-                logger.info("[FAZA] START COUNT")
+                # logger.info("[FAZA] START COUNT")
                 start = dt.datetime.utcnow()
 
                 outputs = model(**inputs)
 
                 end = dt.datetime.utcnow()
-                # logger.info("[FAZA] result: " + str(outputs))
-                logger.info("[FAZA] elapsed time: " + str((end-start).total_seconds()) + " seconds")
+                # logger.info("[FAZA] elapsed time: " + str((end-start).total_seconds()) + " seconds")
 
                 # monitoring
                 tmp_eval_loss = outputs[0]
                 logits_ix = 1 if args.model_type == "bert" else 7
                 logits = outputs[logits_ix]
-                # logger.info("[FAZA] logits: " + str(logits))
                 eval_loss += tmp_eval_loss.mean().item()
                 nb_eval_steps += 1
 
@@ -263,7 +261,8 @@ def evaluate(args, model, tokenizer, prefix=""):
             else:
                 preds = np.append(preds, logits.detach().cpu().numpy(), axis=0)
                 out_label_ids = np.append(out_label_ids, inputs['labels'].detach().cpu().numpy(), axis=0)
-            # logger.info("[FAZA] preds: " + str(preds))
+            pred_ex = np.argmax(preds, axis=1)
+            logger.info("[FAZA] EX_preds: " + str(pred_ex))
 
         preds = np.argmax(preds, axis=1)
         logger.info("[FAZA] END preds: " + str(preds))
