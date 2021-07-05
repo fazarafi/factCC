@@ -263,7 +263,7 @@ def evaluate(args, model, tokenizer, prefix=""):
                 out_label_ids = np.append(out_label_ids, inputs['labels'].detach().cpu().numpy(), axis=0)
             pred_ex = np.argmax(preds, axis=1)
             logger.info("[FAZA] EX_preds: " + str(pred_ex))
-            logger.info("[FAZA] len EX_preds: " + len(pred_ex))
+            logger.info("[FAZA] len EX_preds: " + str(len(pred_ex)))
 
         preds = np.argmax(preds, axis=1)
         logger.info("[FAZA] END preds: " + str(preds))
