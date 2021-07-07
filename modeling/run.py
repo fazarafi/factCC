@@ -235,13 +235,17 @@ def evaluate(args, model, tokenizer, prefix=""):
 
         for batch in tqdm(eval_dataloader, desc="Evaluating"):
             model.eval()
-            logger.info("[FAZA] batch: " + str(batch))
+            logger.info("[FAZA] BEFORE batch: " + str(batch))
+            # batch_ex = batch
+            # batch_ex[0][0]
             batch = tuple(t.to(args.device) for t in batch)
-
+            logger.info("[FAZA] AFTER batch: " + str(batch))
+            
             with torch.no_grad():
+
                 inputs = make_model_input(args, batch)
 
-                # logger.info("[FAZA] inputs: " + str(inputs))
+                logger.info("[FAZA] inputs: " + str(inputs))
                 
                 # logger.info("[FAZA] START COUNT")
 
