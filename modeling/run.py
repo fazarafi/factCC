@@ -241,8 +241,7 @@ def evaluate(args, model, tokenizer, prefix=""):
                 inputs = make_model_input(args, batch)
 
                 logger.info("[FAZA] inputs: " + str(inputs))
-                logger.info("[FAZA] batch: " + str(batch))
-
+                
                 # logger.info("[FAZA] START COUNT")
 
                 start = dt.datetime.utcnow()
