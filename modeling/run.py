@@ -75,6 +75,24 @@ def make_model_input(args, batch):
 
     return inputs
 
+def make_model_input_single(args, batch, i):
+    inputs = {'input_ids':        tf.tensor(batch[0][i]),
+              'attention_mask':   tf.tensor(batch[1][i]),
+              'token_type_ids':   tf.tensor(batch[2][i]),
+              'labels':           tf.tensor(batch[3][i])}
+
+    # add extraction and augmentation spans for PointerBert model
+    if args.model_type == "pbert":
+        inputs["ext_mask"] = batch[4]
+        inputs["ext_start_labels"] = batch[5]
+        inputs["ext_end_labels"] = batch[6]
+        inputs["aug_mask"] = batch[7]
+        inputs["aug_start_labels"] = batch[8]
+        inputs["aug_end_labels"] = batch[9]
+        inputs["loss_lambda"] = args.loss_lambda
+
+    return inputs
+
 
 def train(args, train_dataset, model, tokenizer):
     """ Train the model """
@@ -235,17 +253,19 @@ def evaluate(args, model, tokenizer, prefix=""):
 
         for batch in tqdm(eval_dataloader, desc="Evaluating"):
             model.eval()
-            logger.info("[FAZA] BEFORE batch: " + str(batch))
+            # logger.info("[FAZA] BEFORE batch: " + str(batch))
             # batch_ex = batch
             # batch_ex[0][0]
             batch = tuple(t.to(args.device) for t in batch)
-            logger.info("[FAZA] AFTER batch: " + str(batch))
+            # logger.info("[FAZA] AFTER batch: " + str(batch))
             
             with torch.no_grad():
 
                 inputs = make_model_input(args, batch)
+                single_input = make_model_input_single(args, batch, 0)
 
                 logger.info("[FAZA] inputs: " + str(inputs))
+                logger.info("[FAZA] SINGLE inputs: " + str(single_input))
                 
                 # logger.info("[FAZA] START COUNT")
 
