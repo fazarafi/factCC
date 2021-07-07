@@ -235,12 +235,13 @@ def evaluate(args, model, tokenizer, prefix=""):
 
         for batch in tqdm(eval_dataloader, desc="Evaluating"):
             model.eval()
+            logger.info("[FAZA] batch: " + str(batch))
             batch = tuple(t.to(args.device) for t in batch)
 
             with torch.no_grad():
                 inputs = make_model_input(args, batch)
 
-                logger.info("[FAZA] inputs: " + str(inputs))
+                # logger.info("[FAZA] inputs: " + str(inputs))
                 
                 # logger.info("[FAZA] START COUNT")
 
@@ -285,26 +286,23 @@ def evaluate(args, model, tokenizer, prefix=""):
     return results
 
 def evaluate_single(args, model, document, summary):
+    pred_result = 0
     with torch.no_grad():
         inputs = make_model_input(args, batch)
 
-        # logger.info("[FAZA] START COUNT")
         start = dt.datetime.utcnow()
 
+        #FAZA TODO
         outputs = model(**inputs)
 
         end = dt.datetime.utcnow()
-        # logger.info("[FAZA] elapsed time: " + str((end-start).total_seconds()) + " seconds")
-
-        # monitoring
+        
         logits_ix = 1 if args.model_type == "bert" else 7
         logits = outputs[logits_ix]
         
-    if preds is None:
+    
         preds = logits.detach().cpu().numpy()
-    else:
-        preds = np.append(preds, logits.detach().cpu().numpy(), axis=0)
-    pred_result = np.argmax(preds, axis=1)
+        pred_result = np.argmax(preds, axis=1)
 
     return pred_result
 
