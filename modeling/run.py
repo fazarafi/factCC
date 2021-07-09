@@ -78,10 +78,10 @@ def make_model_input(args, batch):
 def make_model_input_single(args, batch, i):
     logger.info("FAZA 0 [] " + str(batch[0]))
     logger.info("FAZA 0 0 " + str(batch[0][i]))
-    inputs = {'input_ids':        torch.tensor([batch[0][i]]),
-              'attention_mask':   torch.tensor([batch[1][i]]),
-              'token_type_ids':   torch.tensor([batch[2][i]]),
-              'labels':           torch.tensor([batch[3][i]])}
+    inputs = {'input_ids':        torch.tensor(batch[0][i]),
+              'attention_mask':   torch.tensor(batch[1][i]),
+              'token_type_ids':   torch.tensor(batch[2][i]),
+              'labels':           torch.tensor(batch[3][i])}
 
     # add extraction and augmentation spans for PointerBert model
     if args.model_type == "pbert":
