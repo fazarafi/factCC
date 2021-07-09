@@ -76,10 +76,10 @@ def make_model_input(args, batch):
     return inputs
 
 def make_model_input_single(args, batch, i):
-    inputs = {'input_ids':        tensor([batch[0][i]]),
-              'attention_mask':   tensor([batch[1][i]]),
-              'token_type_ids':   tensor([batch[2][i]]),
-              'labels':           tensor([batch[3][i]])}
+    inputs = {'input_ids':        torch.tensor([batch[0][i]]),
+              'attention_mask':   torch.tensor([batch[1][i]]),
+              'token_type_ids':   torch.tensor([batch[2][i]]),
+              'labels':           torch.tensor([batch[3][i]])}
 
     # add extraction and augmentation spans for PointerBert model
     if args.model_type == "pbert":
