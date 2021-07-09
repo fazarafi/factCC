@@ -76,10 +76,10 @@ def make_model_input(args, batch):
     return inputs
 
 def make_model_input_single(args, batch, i):
-    inputs = {'input_ids':        tf.tensor(batch[0][i]),
-              'attention_mask':   tf.tensor(batch[1][i]),
-              'token_type_ids':   tf.tensor(batch[2][i]),
-              'labels':           tf.tensor(batch[3][i])}
+    inputs = {'input_ids':        tensor([batch[0][i]]),
+              'attention_mask':   tensor([batch[1][i]]),
+              'token_type_ids':   tensor([batch[2][i]]),
+              'labels':           tensor([batch[3][i]])}
 
     # add extraction and augmentation spans for PointerBert model
     if args.model_type == "pbert":
@@ -271,7 +271,7 @@ def evaluate(args, model, tokenizer, prefix=""):
 
                 start = dt.datetime.utcnow()
 
-                outputs = model(**inputs)
+                outputs = model(**single_input)
 
                 end = dt.datetime.utcnow()
                 # logger.info("[FAZA] elapsed time: " + str((end-start).total_seconds()) + " seconds")
