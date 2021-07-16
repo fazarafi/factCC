@@ -269,7 +269,7 @@ def evaluate(args, model, tokenizer, prefix=""):
                 outputs = model(**single_input)
 
                 end = dt.datetime.utcnow()
-                # logger.info("[FAZA] elapsed time: " + str((end-start).total_seconds()) + " seconds")
+                logger.info("[FAZA] elapsed time: " + str((end-start).total_seconds()) + " seconds")
 
                 # monitoring
                 tmp_eval_loss = outputs[0]
@@ -286,9 +286,10 @@ def evaluate(args, model, tokenizer, prefix=""):
                 preds = np.append(preds, logits.detach().cpu().numpy(), axis=0)
                 # out_label_ids = np.append(out_label_ids, inputs['labels'].detach().cpu().numpy(), axis=0)
                 out_label_ids = np.append(out_label_ids, single_input['labels'].detach().cpu().numpy(), axis=0)
+            single_pred = np.argmax(logits.detach().cpu().numpy(), axis=1)
             pred_ex = np.argmax(preds, axis=1)
-            logger.info("[FAZA] EX_preds: " + str(pred_ex))
-            logger.info("[FAZA] len EX_preds: " + str(len(pred_ex)))
+            logger.info("[FAZA] single_pred: " + str(single_pred))
+            logger.info("[FAZA] last 3: " + str(pred_ex[-3:]))
 
         preds = np.argmax(preds, axis=1)
         logger.info("[FAZA] END preds: " + str(preds))
