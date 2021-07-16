@@ -58,7 +58,6 @@ def set_seed(args):
 
 
 def make_model_input(args, batch):
-    logger.info("FAZA Batch total " + str(batch[0]))
     inputs = {'input_ids':        batch[0],
               'attention_mask':   batch[1],
               'token_type_ids':   batch[2],
@@ -77,8 +76,6 @@ def make_model_input(args, batch):
     return inputs
 
 def make_model_input_single(args, batch, i):
-    logger.info("FAZA 0 [] " + str(batch[0]))
-    logger.info("FAZA 0 0 " + str(batch[0][i]))
     inputs = {'input_ids':        torch.tensor([batch[0][i].tolist()], device=args.device),
               'attention_mask':   torch.tensor([batch[1][i].tolist()], device=args.device),
               'token_type_ids':   torch.tensor([batch[2][i].tolist()], device=args.device),
@@ -264,13 +261,8 @@ def evaluate(args, model, tokenizer, prefix=""):
             
             with torch.no_grad():
 
-                inputs = make_model_input(args, batch)
+                # inputs = make_model_input(args, batch)
                 single_input = make_model_input_single(args, batch, 0)
-
-                logger.info("[FAZA] inputs: " + str(inputs))
-                logger.info("[FAZA] SINGLE inputs: " + str(single_input))
-                
-                # logger.info("[FAZA] START COUNT")
 
                 start = dt.datetime.utcnow()
 
@@ -288,10 +280,12 @@ def evaluate(args, model, tokenizer, prefix=""):
 
             if preds is None:
                 preds = logits.detach().cpu().numpy()
-                out_label_ids = inputs['labels'].detach().cpu().numpy()
+                # out_label_ids = inputs['labels'].detach().cpu().numpy()
+                out_label_ids = single_input['labels'].detach().cpu().numpy()
             else:
                 preds = np.append(preds, logits.detach().cpu().numpy(), axis=0)
-                out_label_ids = np.append(out_label_ids, inputs['labels'].detach().cpu().numpy(), axis=0)
+                # out_label_ids = np.append(out_label_ids, inputs['labels'].detach().cpu().numpy(), axis=0)
+                out_label_ids = np.append(out_label_ids, single_input['labels'].detach().cpu().numpy(), axis=0)
             pred_ex = np.argmax(preds, axis=1)
             logger.info("[FAZA] EX_preds: " + str(pred_ex))
             logger.info("[FAZA] len EX_preds: " + str(len(pred_ex)))
