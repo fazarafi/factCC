@@ -253,11 +253,7 @@ def evaluate(args, model, tokenizer, prefix=""):
 
         for batch in tqdm(eval_dataloader, desc="Evaluating"):
             model.eval()
-            # logger.info("[FAZA] BEFORE batch: " + str(batch))
-            # batch_ex = batch
-            # batch_ex[0][0]
             batch = tuple(t.to(args.device) for t in batch)
-            # logger.info("[FAZA] AFTER batch: " + str(batch))
             
             with torch.no_grad():
 
@@ -288,11 +284,8 @@ def evaluate(args, model, tokenizer, prefix=""):
                 out_label_ids = np.append(out_label_ids, single_input['labels'].detach().cpu().numpy(), axis=0)
             single_pred = np.argmax(logits.detach().cpu().numpy(), axis=1)
             pred_ex = np.argmax(preds, axis=1)
-            logger.info("[FAZA] single_pred: " + str(single_pred))
-            logger.info("[FAZA] last 3: " + str(pred_ex[-3:]))
 
         preds = np.argmax(preds, axis=1)
-        logger.info("[FAZA] END preds: " + str(preds))
         result = compute_metrics(args.task_name, preds, out_label_ids)
         eval_loss = eval_loss / nb_eval_steps
         result["loss"] = eval_loss
